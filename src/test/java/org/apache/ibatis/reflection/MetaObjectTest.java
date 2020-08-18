@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.domain.blog.Author;
 import org.apache.ibatis.domain.blog.Section;
 import org.apache.ibatis.domain.misc.CustomBeanWrapper;
@@ -30,6 +31,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 public class MetaObjectTest {
 
   @Test
@@ -195,6 +197,7 @@ public class MetaObjectTest {
     MetaObject object = SystemMetaObject.forObject(new Author());
     assertEquals(6, object.getSetterNames().length);
     assertEquals(int.class, object.getGetterType("id"));
+    //log.info(object.getSetterType("username").getName());
     assertEquals(String.class, object.getGetterType("username"));
     assertEquals(String.class, object.getGetterType("password"));
     assertEquals(String.class, object.getGetterType("email"));

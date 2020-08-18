@@ -42,10 +42,10 @@ public interface ObjectWrapper {
   // 获得setter列表
   String[] getSetterNames();
 
-  // 获得getter的类型
+  // 获得setter的类型
   Class<?> getSetterType(String name);
 
-  // 获得setter的类型
+  // 获得getter的类型
   Class<?> getGetterType(String name);
 
   // 查看指定属性是否有setter
