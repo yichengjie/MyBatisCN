@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.typeparam.Calculator;
 import org.apache.ibatis.reflection.typeparam.Calculator.SubCalculator;
 import org.apache.ibatis.reflection.typeparam.Level0Mapper;
@@ -35,6 +36,7 @@ import org.apache.ibatis.reflection.typeparam.Level1Mapper;
 import org.apache.ibatis.reflection.typeparam.Level2Mapper;
 import org.junit.jupiter.api.Test;
 
+@Slf4j
 class TypeParameterResolverTest {
   @Test
   void testReturn_Lv0SimpleClass() throws Exception {
@@ -342,6 +344,7 @@ class TypeParameterResolverTest {
     Class<?> clazz = Level1Mapper.class;
     Method method = clazz.getMethod("selectArray", List[].class);
     Type[] result = TypeParameterResolver.resolveParamTypes(method, clazz);
+    log.info("length : {}", result.length);
     assertTrue(result[0] instanceof GenericArrayType);
     GenericArrayType genericArrayType = (GenericArrayType) result[0];
     assertTrue(genericArrayType.getGenericComponentType() instanceof ParameterizedType);
@@ -365,6 +368,15 @@ class TypeParameterResolverTest {
     Method method = clazz.getMethod("getId");
     Type result = TypeParameterResolver.resolveReturnType(method, clazz);
     assertEquals(Object.class, result);
+  }
+
+  @Test
+  void testReturn_Anonymous2() throws Exception {
+    Calculator<?> instance = new Calculator<Integer>();
+    Class<?> clazz = instance.getClass();
+    Method method = clazz.getMethod("getId");
+    Type result = TypeParameterResolver.resolveReturnType(method, SubCalculator.class);
+    assertEquals(String.class, result);
   }
 
   @Test

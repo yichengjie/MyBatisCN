@@ -1,5 +1,7 @@
 package com.yicj.study.hello;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.reflection.TypeParameterResolver;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.*;
@@ -17,6 +19,7 @@ import java.util.Map;
  * 修改记录
  * @version 产品版本信息 yyyy-mm-dd 姓名(邮箱) 修改信息
  */
+@Slf4j
 public class HelloWorldTest <K extends Integer & Map, V>{
 
     K key;
@@ -119,21 +122,95 @@ public class HelloWorldTest <K extends Integer & Map, V>{
         System.out.println(genericType.getTypeName());
         // 返回TypeVariable
         Field key = PersonService.class.getDeclaredField("key");
+        //获取到TypeVariable，参数化类型只能在申明参数化类型的类上获取
         Type genericType1 = key.getGenericType();
         System.out.println(genericType1.getTypeName());
+        //
 
     }
 
+    @Test
+    void test8() throws NoSuchFieldException {
+        Field field = SubPersonService.class.getField("key");
+        //获取到TypeVariable，参数化类型只能在申明参数化类型的类上获取
+        TypeVariable fieldTypeVariable = (TypeVariable)field.getGenericType();
+        log.info("file type variable : {}", fieldTypeVariable);
+        // 通过类获取类型参数与
+        Type superType = SubPersonService.class.getGenericSuperclass();
+        // 参数化类型 PersonService<String, Integer>
+        ParameterizedType parentAsType = (ParameterizedType) superType ;
+        Type[] actualTypeArguments = parentAsType.getActualTypeArguments();
 
-    class PersonService<K1, V> {
-        private K1 key;
+        // 获取类的类型参数
+        Class<?> parentAsClass = (Class<?>)parentAsType.getRawType();
+        TypeVariable<?>[] typeVariables = parentAsClass.getTypeParameters();
+        log.info("----------------------------------------------------");
+        for (int i = 0 ; i < actualTypeArguments.length; i++){
+            Type curActualType = actualTypeArguments[i] ;
+            TypeVariable curTypeVariable = typeVariables[i] ;
+            log.info("index = {}, actualType = {}, type variable: {} ", (i +1), curActualType.getTypeName(), curTypeVariable.getName());
+            if (fieldTypeVariable == curTypeVariable){
+                System.out.println("找到了字段的实际类型 : " + curActualType.getTypeName());
+            }
+        }
+        log.info("-----------------通过工具获取实际类型------------------");
+        Type type = TypeParameterResolver.resolveFieldType(field, SubPersonService.class);
+        System.out.println(type.getTypeName());
+    }
+
+
+    @Test
+    void 获取实际参数化类型(){
+        Type superclass = SubPersonService.class.getGenericSuperclass();
+        // superclass是ParameterizedType
+        ParameterizedType parameterizedType = (ParameterizedType) superclass ;
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+        for (Type actualTypeArgument: actualTypeArguments){
+            log.info("----> {}", actualTypeArgument.getTypeName());
+        }
+    }
+
+    @Test
+    void 获取类型参数() {
+        // 注意这里不能用SubPersonService.class.getTypeParameters()
+        TypeVariable<?>[] typeParameters = PersonService.class.getTypeParameters();
+        for (TypeVariable typeVariable: typeParameters){
+            log.info("--> {}",typeVariable);
+        }
+    }
+
+    @Test
+    void 获取类型参数2() throws NoSuchFieldException {
+        // 获取类的类型参数
+        Type superclass = SubPersonService.class.getGenericSuperclass();
+        ParameterizedType parameterizedType = (ParameterizedType) superclass ;
+        Class<?> rawType = (Class<?>)parameterizedType.getRawType();
+        // 获取类的类型参数
+        TypeVariable<? extends Class<?>>[] typeParameters = rawType.getTypeParameters();
+        for (TypeVariable<? extends Class<?>> typeVariable : typeParameters){
+            log.info("--> {}",typeVariable);
+        }
+    }
+
+    @Test
+    void test9() throws NoSuchFieldException {
+        Field field = PersonService.class.getField("key");
+        //获取到TypeVariable，参数化类型只能在申明参数化类型的类上获取
+        TypeVariable fieldTypeVariable = (TypeVariable)field.getGenericType();
+        log.info("file type variable : {}", fieldTypeVariable);
+        // 获取类的类型参数
+        TypeVariable<? extends Class<?>>[] typeParameters = PersonService.class.getTypeParameters();
+        for (TypeVariable<? extends Class<?>> typeVariable : typeParameters){
+            log.info("{} type variable is equals filed type variable :{}", typeVariable.getName() , (fieldTypeVariable == typeVariable));
+        }
+    }
+
+
+   public static class PersonService<K1, V> {
+        public K1 key;
         private V value;
 
         private Map<K1,V> ttt ;
-
-        class User<K, V> {
-
-        }
 
         public V hello(){
 
@@ -146,7 +223,13 @@ public class HelloWorldTest <K extends Integer & Map, V>{
         }
     }
 
-        class Hello{
+
+    public static class SubPersonService extends PersonService<String, Integer>{
+
+
+    }
+
+    class Hello{
         public Map<String, List<String>> hello(){
             return null ;
         }
