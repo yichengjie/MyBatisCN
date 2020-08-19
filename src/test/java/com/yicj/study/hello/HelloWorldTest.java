@@ -2,10 +2,7 @@ package com.yicj.study.hello;
 
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,8 +82,10 @@ public class HelloWorldTest <K extends Integer & Map, V>{
     @Test
     void test5(){
         TypeVariable<Class<PersonService>>[] typeParameters = PersonService.class.getTypeParameters();
+        System.out.println("len : " + typeParameters.length);
         for (TypeVariable<Class<PersonService>> typeVariable : typeParameters) {
 
+            System.out.println("---------------------------------------");
             System.out.println(typeVariable.getName());//K1和V；定义的泛型变量<>里面的内容
             Type[] bounds = typeVariable.getBounds();
             System.out.println(bounds.length);//1
@@ -97,13 +96,48 @@ public class HelloWorldTest <K extends Integer & Map, V>{
         }
     }
 
+    @Test
+    void test6() throws NoSuchMethodException {
+        Method hello = PersonService.class.getMethod("hello");
+        Type returnType = hello.getReturnType() ;
+
+        System.out.println("return type : " + returnType.getClass().getName());
+
+        TypeVariable<? extends Class<? extends Type>>[] typeParameters = returnType.getClass().getTypeParameters();
+
+        for (TypeVariable<? extends Class<? extends Type>> typeVariable : typeParameters) {
+            System.out.println(typeVariable.getName());
+        }
+
+    }
+
+    @Test
+    void test7() throws NoSuchFieldException {
+        Field ttt = PersonService.class.getDeclaredField("ttt");
+        // 返回ParameterizedType对象
+        Type genericType = ttt.getGenericType();
+        System.out.println(genericType.getTypeName());
+        // 返回TypeVariable
+        Field key = PersonService.class.getDeclaredField("key");
+        Type genericType1 = key.getGenericType();
+        System.out.println(genericType1.getTypeName());
+
+    }
+
 
     class PersonService<K1, V> {
         private K1 key;
         private V value;
 
+        private Map<K1,V> ttt ;
+
         class User<K, V> {
 
+        }
+
+        public V hello(){
+
+            return null ;
         }
 
         public void testRun() {
