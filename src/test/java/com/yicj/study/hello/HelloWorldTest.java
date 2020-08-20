@@ -21,15 +21,8 @@ import java.util.Map;
  */
 @Slf4j
 public class HelloWorldTest <K extends Integer & Map, V>{
-
     K key;
     V value;
-
-    @Test
-    public void test1(){
-
-        System.out.println("test");
-    }
 
     @Test
     public void computeIfAbsent(){
@@ -45,7 +38,19 @@ public class HelloWorldTest <K extends Integer & Map, V>{
 
 
     @Test
-    void 获取Class的参数化类型(){
+    public void 获取类得实际参数话类型(){
+        SubPersonService subPersonService = new SubPersonService() ;
+        log.info("class equals : {}", subPersonService.getClass() == SubPersonService.class);
+        ParameterizedType parameterizedType = (ParameterizedType)subPersonService.getClass().getGenericSuperclass();
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+        for (Type type: actualTypeArguments){
+            log.info("actual type name : {}", type.getTypeName());
+        }
+    }
+
+
+    @Test
+    void 获取Class的类型参数(){
         Type[] types = HelloWorldTest.class.getTypeParameters();
 
         TypeVariable v1 = (TypeVariable) types[0] ;
@@ -61,9 +66,8 @@ public class HelloWorldTest <K extends Integer & Map, V>{
         log.info("-------------分割线-----------------------------------");
     }
 
-
     @Test
-    void 获取Class的类型参数(){
+    void 获取Class的类型参数2(){
         TypeVariable<Class<PersonService>>[] typeParameters = PersonService.class.getTypeParameters();
         for (TypeVariable<Class<PersonService>> typeVariable : typeParameters) {
             log.info("---------------------------------------");
@@ -75,7 +79,6 @@ public class HelloWorldTest <K extends Integer & Map, V>{
             log.info("generic declaration ：{}", typeVariable.getGenericDeclaration());//null
         }
     }
-
 
     @Test
     void 获取字段的类型参数() throws NoSuchFieldException {
@@ -194,11 +197,8 @@ public class HelloWorldTest <K extends Integer & Map, V>{
    public static class PersonService<K1, V> {
         public K1 key;
         private V value;
-
         public Map<K1,V> ttt ;
-
         public V hello(){
-
             return null ;
         }
 
@@ -208,16 +208,11 @@ public class HelloWorldTest <K extends Integer & Map, V>{
         }
     }
 
-
-    public static class SubPersonService extends PersonService<String, Integer>{
-
-
-    }
+    public static class SubPersonService extends PersonService<String, Integer>{ }
 
     class Hello{
         public Map<String, List<String>> hello(){
             return null ;
         }
     }
-
 }
