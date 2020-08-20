@@ -371,15 +371,6 @@ class TypeParameterResolverTest {
   }
 
   @Test
-  void testReturn_Anonymous2() throws Exception {
-    Calculator<?> instance = new Calculator<Integer>();
-    Class<?> clazz = instance.getClass();
-    Method method = clazz.getMethod("getId");
-    Type result = TypeParameterResolver.resolveReturnType(method, SubCalculator.class);
-    assertEquals(String.class, result);
-  }
-
-  @Test
   void testField_GenericField() throws Exception {
     Class<?> clazz = SubCalculator.class;
     Class<?> declaredClass = Calculator.class;
