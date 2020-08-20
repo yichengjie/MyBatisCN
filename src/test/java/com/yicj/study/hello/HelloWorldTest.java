@@ -32,105 +32,88 @@ public class HelloWorldTest <K extends Integer & Map, V>{
     }
 
     @Test
-    public void test2(){
+    public void computeIfAbsent(){
         String name = "test";
         Map<String, List<String>> map = new HashMap<>() ;
         map.computeIfAbsent(name, k -> new ArrayList<>()) ;
         map.putIfAbsent("name", new ArrayList<>()) ;
 
-
         Map<String, List<Method>> conflictingMethods = new HashMap<>() ;
         List<Method> list = conflictingMethods.computeIfAbsent(name, k -> new ArrayList<>());
-
-
-
+        log.info("list ： {}", list);
     }
 
 
     @Test
-    void test3() throws NoSuchMethodException {
-        Method hello = Hello.class.getDeclaredMethod("hello");
-        Type returnType = hello.getGenericReturnType();
-
-        if (returnType instanceof ParameterizedType){
-            ParameterizedType parameterizedType = (ParameterizedType) returnType ;
-            Type[] typeArguments = parameterizedType.getActualTypeArguments();
-        }
-
-        Type[] types = returnType.getClass().getTypeParameters();
-        System.out.println("----> len: " + types.length);
-        for(Type type : types){
-            TypeVariable t = (TypeVariable)type;
-            System.out.println(t.getGenericDeclaration());
-        }
-
-    }
-
-
-
-
-    @Test
-    void test4(){
+    void 获取Class的参数化类型(){
         Type[] types = HelloWorldTest.class.getTypeParameters();
-        for(Type type : types){
-            TypeVariable t = (TypeVariable)type;
-            System.out.println(t.getGenericDeclaration());
-            int size = t.getBounds().length;
-            System.out.println(t.getBounds()[size - 1]);
-            System.out.println(t.getName() + "\n-------------分割线-------------");
-        }
+
+        TypeVariable v1 = (TypeVariable) types[0] ;
+        Type[] bs1 = v1.getBounds();
+        log.info("bound size : {},  bound 0: {}, bound 1:{}", bs1.length,  bs1[0], bs1[1]);
+        log.info("type variable name : {}", v1.getName());
+        log.info("-------------分割线-----------------------------------");
+
+        TypeVariable v2 = (TypeVariable) types[0] ;
+        Type[] bs2 = v1.getBounds();
+        log.info("bound size : {},  bound 0: {}", bs2.length,  bs2[0]);
+        log.info("type variable name : {}", v2.getName());
+        log.info("-------------分割线-----------------------------------");
     }
 
 
     @Test
-    void test5(){
+    void 获取Class的类型参数(){
         TypeVariable<Class<PersonService>>[] typeParameters = PersonService.class.getTypeParameters();
-        System.out.println("len : " + typeParameters.length);
         for (TypeVariable<Class<PersonService>> typeVariable : typeParameters) {
-
-            System.out.println("---------------------------------------");
-            System.out.println(typeVariable.getName());//K1和V；定义的泛型变量<>里面的内容
+            log.info("---------------------------------------");
+            log.info("type variable name : {}", typeVariable.getName());//K1和V；定义的泛型变量<>里面的内容
             Type[] bounds = typeVariable.getBounds();
-            System.out.println(bounds.length);//1
-            for (Type t : bounds) {
-                System.out.println(t);//class java.lang.Object
+            for (int i = 0 ; i < bounds.length ; i++) {
+                log.info("bound[{}] : {}", i, bounds[i]);//class java.lang.Object
             }
-            System.out.println(typeVariable.getGenericDeclaration());//null
+            log.info("generic declaration ：{}", typeVariable.getGenericDeclaration());//null
+        }
+    }
+
+
+    @Test
+    void 获取字段的类型参数() throws NoSuchFieldException {
+        Field field = PersonService.class.getField("key");
+        TypeVariable typeVariable = (TypeVariable)field.getGenericType() ;
+        log.info("type name : {}, typeName: {}" ,typeVariable.getName(), typeVariable.getTypeName());
+        Type[] bounds = typeVariable.getBounds();
+        for (Type bound: bounds){
+            log.info("bound name :{}", bound.getTypeName());
         }
     }
 
     @Test
-    void test6() throws NoSuchMethodException {
+    void 获取方法返回值类型参数() throws NoSuchMethodException {
         Method hello = PersonService.class.getMethod("hello");
-        Type returnType = hello.getReturnType() ;
-
-        System.out.println("return type : " + returnType.getClass().getName());
-
-        TypeVariable<? extends Class<? extends Type>>[] typeParameters = returnType.getClass().getTypeParameters();
-
-        for (TypeVariable<? extends Class<? extends Type>> typeVariable : typeParameters) {
-            System.out.println(typeVariable.getName());
+        TypeVariable typeVariable = (TypeVariable)hello.getGenericReturnType() ;
+        log.info("type name : {}, typeName: {}" ,typeVariable.getName(), typeVariable.getTypeName());
+        Type[] bounds = typeVariable.getBounds();
+        for (Type bound: bounds){
+            log.info("bound name :{}", bound.getTypeName());
         }
-
     }
 
     @Test
-    void test7() throws NoSuchFieldException {
+    void 获取字段实际类型_不可行() throws NoSuchFieldException {
         Field ttt = PersonService.class.getDeclaredField("ttt");
+        // 上面或者下面这种都获取不到实际的参数类型
+        //Field ttt = SubPersonService.class.getField("ttt");
         // 返回ParameterizedType对象
-        Type genericType = ttt.getGenericType();
-        System.out.println(genericType.getTypeName());
-        // 返回TypeVariable
-        Field key = PersonService.class.getDeclaredField("key");
-        //获取到TypeVariable，参数化类型只能在申明参数化类型的类上获取
-        Type genericType1 = key.getGenericType();
-        System.out.println(genericType1.getTypeName());
-        //
-
+        ParameterizedType genericType = (ParameterizedType)ttt.getGenericType();
+        Type[] actualTypeArguments = genericType.getActualTypeArguments();
+        for (Type type: actualTypeArguments){
+            log.info("type name : {} ,type class :{}",type.getTypeName(), type.getClass());
+        }
     }
 
     @Test
-    void test8() throws NoSuchFieldException {
+    void 获取字段实际类型_可行() throws NoSuchFieldException {
         Field field = SubPersonService.class.getField("key");
         //获取到TypeVariable，参数化类型只能在申明参数化类型的类上获取
         TypeVariable fieldTypeVariable = (TypeVariable)field.getGenericType();
@@ -170,6 +153,8 @@ public class HelloWorldTest <K extends Integer & Map, V>{
         }
     }
 
+
+
     @Test
     void 获取类型参数() {
         // 注意这里不能用SubPersonService.class.getTypeParameters()
@@ -193,7 +178,7 @@ public class HelloWorldTest <K extends Integer & Map, V>{
     }
 
     @Test
-    void test9() throws NoSuchFieldException {
+    void 字段类型参数与Class的类型参数() throws NoSuchFieldException {
         Field field = PersonService.class.getField("key");
         //获取到TypeVariable，参数化类型只能在申明参数化类型的类上获取
         TypeVariable fieldTypeVariable = (TypeVariable)field.getGenericType();
@@ -210,7 +195,7 @@ public class HelloWorldTest <K extends Integer & Map, V>{
         public K1 key;
         private V value;
 
-        private Map<K1,V> ttt ;
+        public Map<K1,V> ttt ;
 
         public V hello(){
 
