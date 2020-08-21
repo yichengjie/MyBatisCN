@@ -1,4 +1,4 @@
-package com.yicj.study.hello;
+package com.yicj.study.reflection;
 
 import com.alibaba.fastjson.JSON;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.yicj.study.hello;
+package com.yicj.study.reflection;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.ParamNameUtil;
