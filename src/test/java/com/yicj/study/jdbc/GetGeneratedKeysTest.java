@@ -22,7 +22,7 @@ import java.sql.*;
  * @version 产品版本信息 yyyy-mm-dd 姓名(邮箱) 修改信息
  */
 @Slf4j
-public class GetGeneratedKeys {
+public class GetGeneratedKeysTest {
 
     @Test
     void test1() throws Exception{
