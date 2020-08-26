@@ -53,13 +53,15 @@ class CglibProxyTest extends SerializableProxyTest {
     // yes, it must go in uppercase
     HashMap<String, ResultLoaderMap.LoadPair> unloadedProperties = new HashMap<>();
     unloadedProperties.put("ID", null);
-    Author author2 = (Author) ((CglibProxyFactory)proxyFactory).createDeserializationProxy(author, unloadedProperties, new DefaultObjectFactory(), new ArrayList<>(), new ArrayList<>());
+    Author author2 = (Author) ((CglibProxyFactory)proxyFactory).createDeserializationProxy(
+        author, unloadedProperties, new DefaultObjectFactory(), new ArrayList<>(), new ArrayList<>());
     Assertions.assertThrows(ExecutorException.class, author2::getId);
   }
 
   @Test
   void shouldLetCallALoadedProperty() {
-    Author author2 = (Author) ((CglibProxyFactory)proxyFactory).createDeserializationProxy(author, new HashMap<>(), new DefaultObjectFactory(), new ArrayList<>(), new ArrayList<>());
+    Author author2 = (Author) ((CglibProxyFactory)proxyFactory).createDeserializationProxy(
+        author, new HashMap<>(), new DefaultObjectFactory(), new ArrayList<>(), new ArrayList<>());
     assertEquals(999, author2.getId());
   }
 

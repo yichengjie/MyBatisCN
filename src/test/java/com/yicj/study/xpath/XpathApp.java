@@ -20,7 +20,7 @@ import java.io.InputStream;
 public class XpathApp {
 
     public static void main(String[] args) throws Exception {
-        String resource = "com/yicj/study/xpath/info.xml" ;
+        String resource = "com/yicj/study/xpath/info.xml";
         InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();

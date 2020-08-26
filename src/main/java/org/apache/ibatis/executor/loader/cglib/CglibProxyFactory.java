@@ -119,7 +119,12 @@ public class CglibProxyFactory implements ProxyFactory {
     // 被代理类构造函数的参数列表
     private final List<Object> constructorArgs;
 
-    private EnhancedResultObjectProxyImpl(Class<?> type, ResultLoaderMap lazyLoader, Configuration configuration, ObjectFactory objectFactory, List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
+    private EnhancedResultObjectProxyImpl(Class<?> type,
+                                          ResultLoaderMap lazyLoader,
+                                          Configuration configuration,
+                                          ObjectFactory objectFactory,
+                                          List<Class<?>> constructorArgTypes,
+                                          List<Object> constructorArgs) {
       this.type = type;
       this.lazyLoader = lazyLoader;
       this.aggressive = configuration.isAggressiveLazyLoading();

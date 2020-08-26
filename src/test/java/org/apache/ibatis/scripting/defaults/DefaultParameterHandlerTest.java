@@ -71,18 +71,23 @@ class DefaultParameterHandlerTest {
   }
 
   MappedStatement getMappedStatement() {
-    final Configuration config = new Configuration();
-    final TypeHandlerRegistry registry = config.getTypeHandlerRegistry();
-    return new MappedStatement.Builder(config, "testSelect", new StaticSqlSource(config, "some select statement"), SqlCommandType.SELECT).resultMaps(
-        new ArrayList<ResultMap>() {
-          {
-            add(new ResultMap.Builder(config, "testMap", HashMap.class, new ArrayList<ResultMapping>() {
-              {
-                add(new ResultMapping.Builder(config, "cOlUmN1", "CoLuMn1", registry.getTypeHandler(Integer.class)).build());
-              }
-            }).build());
-          }
-        }).build();
+      final Configuration config = new Configuration();
+      final TypeHandlerRegistry registry = config.getTypeHandlerRegistry();
+
+      //1. ResultMapping集合
+      List<ResultMapping> resultMappings = new ArrayList<>()  ;
+      //2. 构建resultMap对象
+      ResultMapping resultMapping = new ResultMapping.Builder(config, "cOlUmN1", "CoLuMn1", registry.getTypeHandler(Integer.class)).build();
+      resultMappings.add(resultMapping);
+
+      //3.ResultMap 集合
+      List<ResultMap> resultMapList = new ArrayList<>() ;
+      //4. 构建ResultMap对象
+      ResultMap resultMap = new ResultMap.Builder(config, "testMap", HashMap.class, resultMappings).build();
+      resultMapList.add(resultMap);
+
+      return new MappedStatement.Builder(config, "testSelect", new StaticSqlSource(config, "some select statement"), SqlCommandType.SELECT)
+        .resultMaps(resultMapList).build();
   }
 
 }
