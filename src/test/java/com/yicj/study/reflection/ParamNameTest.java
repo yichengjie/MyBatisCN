@@ -21,6 +21,10 @@ import java.util.List;
 @Slf4j
 public class ParamNameTest {
 
+  class HelloWorld{
+    public void hello(String name, Integer age){}
+  }
+
     @Test
     void 获取参数注解() throws NoSuchMethodException {
         Method method = HelloWorld.class.getMethod("hello", String.class, Integer.class);

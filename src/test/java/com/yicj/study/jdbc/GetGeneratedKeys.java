@@ -1,8 +1,15 @@
 package com.yicj.study.jdbc;
 
+import com.yicj.study.mapper.UserMapper;
+import com.yicj.study.model.User;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.jupiter.api.Test;
 
+import java.io.InputStream;
 import java.sql.*;
 
 /**
@@ -48,4 +55,22 @@ public class GetGeneratedKeys {
         Connection connection = DriverManager.getConnection(url, user, password);
         return connection ;
     }
+
+    @Test
+    void test2() throws Exception{
+      String resource = "mybatis-config.xml";
+      InputStream inputStream = Resources.getResourceAsStream(resource);
+      SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+      User user = new User() ;
+      user.setUsername("yicj3");
+      user.setPassword("123");
+      user.setRoles("admin");
+      try (SqlSession session = sqlSessionFactory.openSession()) {
+        UserMapper mapper = session.getMapper(UserMapper.class);
+        mapper.insert(user);
+        log.info("user : {}", user);
+      }
+
+    }
+
 }
