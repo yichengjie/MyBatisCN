@@ -2,6 +2,8 @@ package com.yicj.study.mapper;
 
 import com.yicj.study.model.User;
 
+import java.util.List;
+
 /**
  * ClassName: UserMapper
  * Description: TODO(描述)
@@ -14,4 +16,6 @@ import com.yicj.study.model.User;
 public interface UserMapper {
 
    void insert(User user) ;
+
+   List<User> selectAll() ;
 }
