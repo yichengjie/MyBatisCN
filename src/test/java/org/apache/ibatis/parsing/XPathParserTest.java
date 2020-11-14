@@ -31,7 +31,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.*;
 
 class XPathParserTest {
-  private String resource = "resources/nodelet_test.xml";
+  private String resource = "src/test/resources/nodelet_test.xml";
 
   //InputStream Source
   @Test
