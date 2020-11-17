@@ -14,8 +14,6 @@ import java.util.List;
  * @version 产品版本信息 yyyy-mm-dd 姓名(邮箱) 修改信息
  */
 public interface UserMapper {
-
    void insert(User user) ;
-
-   List<User> selectAll() ;
+   List<User> selectByParam(Integer id) ;
 }

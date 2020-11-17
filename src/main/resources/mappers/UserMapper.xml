@@ -6,11 +6,16 @@
 <mapper namespace="com.yicj.study.mapper.UserMapper">
 
     <insert id="insert" parameterType="com.yicj.study.model.User" useGeneratedKeys="true" keyProperty="id">
-        insert into user(username, password, roles) values(#{username},#{password} , #{roles})
+        insert into user(username, password, roles) values('${username}', '${password}', '${roles}')
     </insert>
 
-    <select id="selectAll" resultType="com.yicj.study.model.User" >
+    <select id="selectByParam" resultType="com.yicj.study.model.User" >
         select * from user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
     </select>
 
 </mapper>

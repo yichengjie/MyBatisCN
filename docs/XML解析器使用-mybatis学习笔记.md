@@ -15,7 +15,7 @@
     </employee>
     ```
 2. 使用XPathParser解析xml内容
-    ```java
+    ```text
     public void main(String [] args) throws Exception {
         try (InputStream inputStream = Resources.getResourceAsStream("nodelet_test.xml")) {
           XPathParser parser = new XPathParser(inputStream);

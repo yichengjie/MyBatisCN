@@ -1,6 +1,9 @@
 package com.yicj.study.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * ClassName: User
@@ -12,6 +15,9 @@ import lombok.Data;
  * @version 产品版本信息 yyyy-mm-dd 姓名(邮箱) 修改信息
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
   private Integer id ;
   private String username ;
