@@ -205,11 +205,14 @@ public class ResultLoaderMap {
 
     /**
      * 进行加载操作
-     * @param userObject 需要被懒加载的对象（只有当this.metaResultObject == null || this.resultLoader == null才生效，否则会采用属性metaResultObject对应的对象）
+     * @param userObject 需要被懒加载的对象（
+     *                   只有当this.metaResultObject == null || this.resultLoader == null才生效，
+     *                   否则会采用属性metaResultObject对应的对象）
      * @throws SQLException
      */
     public void load(final Object userObject) throws SQLException {
-      if (this.metaResultObject == null || this.resultLoader == null) { // 输出结果对象的封装不存在或者输出结果加载器不存在
+      // 输出结果对象的封装不存在或者输出结果加载器不存在
+      if (this.metaResultObject == null || this.resultLoader == null) {
         // 判断用以加载属性的对应的SQL语句存在
         if (this.mappedParameter == null) {
           throw new ExecutorException("Property [" + this.property + "] cannot be loaded because "

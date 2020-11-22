@@ -19,7 +19,6 @@ public class TypeReferenceTest {
 
     @Test
     public void test1(){
-
         new BBB().hello();
     }
 
@@ -35,6 +34,4 @@ public class TypeReferenceTest {
     }
 
     class Person{}
-
-
 }

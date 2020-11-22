@@ -290,7 +290,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         if (!(!stmt.getMoreResults() && stmt.getUpdateCount() == -1)) {
           ResultSet rs = stmt.getResultSet();
           if (rs == null) {
-            return getNextResultSet(stmt);
+              return getNextResultSet(stmt);
           } else {
             return new ResultSetWrapper(rs, configuration);
           }

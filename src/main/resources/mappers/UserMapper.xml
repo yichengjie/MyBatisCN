@@ -9,7 +9,7 @@
         insert into user(username, password, roles) values('${username}', '${password}', '${roles}')
     </insert>
 
-    <select id="selectByParam" resultType="com.yicj.study.model.User" >
+    <select id="selectByParam" resultType="com.yicj.study.model.User">
         select * from user
         <where>
             <if test="id != null">
@@ -17,5 +17,4 @@
             </if>
         </where>
     </select>
-
 </mapper>
