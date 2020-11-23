@@ -86,7 +86,15 @@ public class SqlSessionManager implements SqlSessionFactory, SqlSession {
   }
 
   public void startManagedSession(boolean autoCommit) {
-    this.localSqlSession.set(openSession(autoCommit));
+    this.localSqlSession.set(openSession(
+
+
+
+
+
+
+
+    ));
   }
 
   public void startManagedSession(Connection connection) {
