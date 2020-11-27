@@ -21,7 +21,6 @@ public class PluginsTest {
   class MyInterceptor implements Interceptor{
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-      Object[] args = invocation.getArgs();
       System.out.println("-------------");
       return invocation.proceed();
     }

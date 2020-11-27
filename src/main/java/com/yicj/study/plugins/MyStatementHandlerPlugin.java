@@ -27,7 +27,7 @@ public class MyStatementHandlerPlugin implements Interceptor {
         log.info("SQL语句类型：{}", metaObject.getValue("target.delegate.parameterHandler.mappedStatement.sqlCommandType"));
         log.info("Mapper方法全路劲名: {}", metaObject.getValue("target.delegate.parameterHandler.mappedStatement.id"));
         // 修改sql语句
-        String newSql = metaObject.getValue("target.delegate.boundSql.sql") + " limit 2" ;
+        String newSql = metaObject.getValue("target.delegate.boundSql.sql").toString() ; //这里可以修改sql
         metaObject.setValue("target.delegate.boundSql.sql", newSql);
         return invocation.proceed();
     }
