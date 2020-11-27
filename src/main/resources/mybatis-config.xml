@@ -3,6 +3,10 @@
     PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <!-- mybatis-config.xml -->
+    <typeHandlers>
+      <typeHandler handler="com.yicj.study.handler.ExampleTypeHandler" javaType="String" jdbcType="VARCHAR"/>
+    </typeHandlers>
 
     <plugins>
         <!--<plugin interceptor="com.yicj.study.plugins.MyExecutorInterceptor" />-->
